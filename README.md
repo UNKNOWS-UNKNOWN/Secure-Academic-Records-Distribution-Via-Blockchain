@@ -142,9 +142,7 @@ Once all nodes are active, transactions and blockchain updates are synchronized 
 * Database integration or Cloud integration
 * Smart contract implementation
 
-## Screenshots
-
-## Screenshots
+## Screenshots 
 
 ### Blockchain Ledger
 
@@ -156,7 +154,7 @@ Once all nodes are active, transactions and blockchain updates are synchronized 
 
 ### Transaction Creation
 
-![Transaction](Screenshots/South_node.png)
+![Transaction](Screenshots/File_upload.png)
 
 ### Dashboard
 
