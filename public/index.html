@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blockchain Academy Records</title>
+
+  <style>
+    /* 🌐 Global */
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #eaeaea;
+  padding: 20px;
+}
+
+/* 🧠 Title */
+h1 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+/* 📦 Cards */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* 📤 Upload Form */
+form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+input[type="file"] {
+  color: white;
+}
+
+/* 🔘 Buttons */
+button {
+  background: linear-gradient(135deg, #00e5ff, #2979ff);
+  border: none;
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 229, 255, 0.5);
+}
+
+/* 🔍 Filter */
+select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+/* 📊 Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  font-size: 13px;
+}
+
+th {
+  background: rgba(0, 0, 0, 0.6);
+  color: #00e5ff;
+  padding: 12px;
+  text-transform: uppercase;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hash {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #000;
+  word-break: break-all;
+}
+/* 🖤 Table content text color */
+tbody td {
+  color: #000;
+  font-weight: 500;
+}
+
+/* 🌍 Region row colors */
+tr[data-region="Central"] {
+  background: rgba(33, 150, 243, 0.28);
+}
+tr[data-region="North"] {
+  background: rgba(76, 175, 80, 0.28);
+}
+tr[data-region="South"] {
+  background: rgba(255, 152, 0, 0.28);
+}
+tr[data-region="East"] {
+  background: rgba(156, 39, 176, 0.28);
+}
+
+/* 🟢 Hover */
+tbody tr:hover td {
+  color: #000;
+}
+
+/* 🪟 Modal */
+#proofModal > div {
+  background: #111;
+  color: white;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+}
+
+#proofModal code {
+  font-size: 11px;
+  color: #00e5ff;
+}
+
+/* 📱 Responsive */
+@media (max-width: 800px) {
+  form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.legend span {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-right: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;   /* 🖤 BLACK TEXT */
+}
+
+.legend .central { background: #e3f2fd; }
+.legend .north   { background: #e8f5e9; }
+.legend .south   { background: #fff3e0; }
+.legend .east    { background: #f3e5f5; }
+tbody tr {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+tr[data-region="Central"]:hover {
+  box-shadow: inset 0 0 0 2px #2196f3;
+}
+tr[data-region="North"]:hover {
+  box-shadow: inset 0 0 0 2px #4caf50;
+}
+tr[data-region="South"]:hover {
+  box-shadow: inset 0 0 0 2px #ff9800;
+}
+tr[data-region="East"]:hover {
+  box-shadow: inset 0 0 0 2px #9c27b0;
+}
+.explore-btn {
+  background: linear-gradient(135deg, #7c4dff, #651fff);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.explore-btn:hover {
+  box-shadow: 0 8px 20px rgba(124, 77, 255, 0.6);
+}
+/* 🧭 Header layout: upload left, explore right */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upload-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+/* 🧾 Proof modal content text */
+#proofModal > div {
+  background: #ffffff;
+  color: #000000;   /* 🖤 BLACK TEXT */
+}
+
+#proofModal p,
+#proofModal b,
+#proofModal code {
+  color: #000000;
+}
+.node {
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.node.online {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.node.syncing {
+  background: #fff8e1;
+  color: #ff8f00;
+}
+
+.node.offline {
+  background: #ffebee;
+  color: #b71c1c;
+}
+/* 🌐 Horizontal node status layout */
+.node-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* individual node cards */
+.node {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+.filter-section {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.filter-left {
+  justify-self: start;
+}
+
+.filter-center {
+  justify-self: center;
+}
+
+#searchInput {
+  width: 320px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+#proofModal button {
+  background: linear-gradient(135deg, #00e676, #00c853);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#proofModal button:hover {
+  box-shadow: 0 6px 16px rgba(0, 230, 118, 0.6);
+}
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 12px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 16px;
+  color: #00e5ff;
+}
+
+.nav-right {
+  display: flex;
+  gap: 10px;
+}
+
+.navbar button {
+  background: linear-gradient(135deg, #7c4dff, #651fff);
+  color: #fff;
+}
+.navbar a.active button {
+  background: #00e5ff;
+  color: black;
+}
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+  <div class="nav-left">
+    <span class="logo">📚 Blockchain Records</span>
+  </div>
+
+  <div class="nav-right">
+    <a href="/dashboard">
+      <button>📊 Dashboard</button>
+    </a>
+
+    <a href="/explorer.html">
+      <button>🔍 Explorer</button>
+    </a>
+  </div>
+</div>
+
+  <h1>📚 Blockchain Academy Records</h1>
+  <!--status indicator-->
+  <div id="nodeStatus" class="node-row"></div>
+
+  <!-- Upload Form -->
+  <div class="card header-bar">
+  <form id="uploadForm">
+    <input type="file" name="file" required />
+    <button type="submit">Upload File</button>
+  </form>
+  </div>
+
+  <!-- region filter-->
+  <div class="card">
+  <div class="filter-section">
+
+    <!-- LEFT: Region filter -->
+    <div class="filter-left">
+      <label for="regionFilter"><strong>Filter by region:</strong></label>
+      <select id="regionFilter">
+        <option value="ALL">All Regions</option>
+        <option value="North">North</option>
+        <option value="South">South</option>
+        <option value="East">East</option>
+      </select>
+    </div>
+
+    <!-- CENTER: Search bar -->
+    <div class="filter-center">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by file name or hash..."
+        oninput="applyFilters()"
+      />
+    </div>
+
+  </div>
+</div>
+
+<hr />
+<div class="legend">
+  <strong>Legend:</strong>
+  <!--<span class="central">Central</span>-->
+  <span class="north">North</span>
+  <span class="south">South</span>
+  <span class="east">East</span>
+</div>
+<br /><br />
+  <!-- Records Table -->
+  <div class="card table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>File Name</th>
+        <th>Region</th>
+        <th>Uploaded At</th>
+        <th>FileHash</th>
+        <th>proof</th>
+      </tr>
+    </thead>
+    <tbody id="records"></tbody>
+  </table>
+  </div>
+
+  <script>
+  const REGION_COLORS = {
+    Central: "#e3f2fd",
+    North: "#e8f5e9",
+    South: "#fff3e0",
+    East: "#f3e5f5",
+    Unknown: "#eeeeee"
+  };
+
+  let allBlocks = [];
+  let currentRegion = "ALL";
+
+  async function loadRecords() {
+  const res = await fetch("/api/blocks");
+  const blocks = await res.json();
+
+  // Keep full chain, but skip genesis for UI
+  allBlocks = blocks
+    .map((block, i) => ({ ...block, chainIndex: i }))
+    .filter(b => b.chainIndex !== 0);
+
+  applyFilters();
+}
+
+  /*function renderTable() {
+    const tbody = document.getElementById("records");
+    tbody.innerHTML = "";
+
+    allBlocks.forEach((block, index) => {
+      const d = block.data;
+      if (!d) return;
+      if (currentRegion !== "ALL" && d.region !== currentRegion) return;
+
+      const row = document.createElement("tr");
+      row.style.backgroundColor =
+        REGION_COLORS[d.region] || REGION_COLORS.Unknown;
+
+      row.innerHTML = `
+        <td>${d.originalName}</td>
+        <td>${d.region}</td>
+        <td>${new Date(d.uploadedAt).toLocaleString()}</td>
+        <td class="hash">${d.hash}</td>
+        <td>
+          <button onclick="showProof(${block.chainIndex})">
+            View Proof
+          </button>
+        </td>
+      `;
+      row.dataset.region = d.region;
+
+      tbody.appendChild(row);
+    });
+  }*/
+
+  function showProof(chainIndex) {
+  const block = allBlocks.find(b => b.chainIndex === chainIndex);
+  const d = block.data;
+
+  document.getElementById("proofContent").innerHTML = `
+    <p><b>File Name:</b> ${d.originalName}</p>
+    <p><b>Region:</b> ${d.region}</p>
+    <p><b>Uploaded At:</b> ${new Date(d.uploadedAt).toLocaleString()}</p>
+
+    <p><b>File Hash:</b><br><code>${d.hash}</code></p>
+    <p><b>Previous Block Hash:</b><br><code>${block.prevHash}</code></p>
+    <p><b>Current Block Hash:</b><br><code>${block.hash}</code></p>
+
+    <hr>
+
+    <button onclick="downloadProof(${chainIndex})">
+      ⬇ Download Proof (PDF)
+    </button>
+  `;
+
+  document.getElementById("proofModal").style.display = "flex";
+  }
+  function downloadProof(index) {
+  window.open(`/api/proof/${index}`, "_blank");
+  }
+
+  function closeProof() {
+    document.getElementById("proofModal").style.display = "none";
+  }
+
+  document
+    .getElementById("regionFilter")
+    .addEventListener("change", e => {
+      currentRegion = e.target.value;
+      applyFilters();
+    });
+
+  document
+    .getElementById("uploadForm")
+    .addEventListener("submit", async e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      await fetch("/api/mine", { method: "POST", body: formData });
+      e.target.reset();
+      loadRecords();
+    });
+
+  loadRecords();
+
+  // syncing the ports to idenitify the network status
+  async function loadNodeStatus() {
+  const container = document.getElementById("nodeStatus");
+  container.innerHTML = "";
+
+  const res = await fetch("/api/nodes");
+  const { nodes } = await res.json();
+
+  const heights = nodes
+    .filter(n => n.online)
+    .map(n => n.height || 0);
+
+  const maxHeight = Math.max(...heights, 0);
+
+  nodes.forEach(node => {
+    let status = "🔴 Offline";
+    let cls = "offline";
+
+    if (node.online) {
+      if (node.height === maxHeight) {
+        status = "🟢 In Sync";
+        cls = "online";
+      } else {
+        status = "🟡 Syncing";
+        cls = "syncing";
+      }
+    }
+
+    container.innerHTML += `
+      <div class="node ${cls}">
+        <b>${node.region}</b> — ${status}
+        ${node.height ? `(Blocks: ${node.height})` : ""}
+      </div>
+    `;
+  });
+}
+
+//setInterval(loadNodeStatus, 5000);
+loadNodeStatus();
+
+  //search filter starts with letter
+  function applyFilters() {
+  const searchValue = document
+    .getElementById("searchInput")
+    .value
+    .trim()
+    .toLowerCase();
+
+  const regionValue = document.getElementById("regionFilter").value;
+  const tbody = document.getElementById("records");
+  tbody.innerHTML = "";
+
+  allBlocks.forEach((block, index) => {
+    const d = block.data?.data || block.data || {};
+    // Safe values
+    const fileName = d.originalName || "N/A";
+    const region = d.region || "N/A";
+    const uploadedAt = d.uploadedAt
+      ? new Date(d.uploadedAt).toISOString()
+      : "N/A";
+    const hash = d.hash || "N/A";
+    if (!d) return;
+
+    // 🌍 Region filter
+    if (regionValue !== "ALL" && d.region !== regionValue) return;
+
+    // 🔍 Starts-with search (filename OR hash)
+    if (
+      searchValue &&
+      !fileName.toLowerCase().startsWith(searchValue) &&
+      !hash.toLowerCase().startsWith(searchValue)
+    ) {
+      return;
+    }
+
+    const row = document.createElement("tr");
+    row.dataset.region = d.region;
+
+    row.style.backgroundColor =
+      REGION_COLORS[d.region] || REGION_COLORS.Unknown;
+
+    row.innerHTML = `
+      <td>${fileName}</td>
+      <td>${region}</td>
+      <td>${new Date(uploadedAt).toLocaleString()}</td>
+      <td class="hash">${hash}</td>
+      <td>
+        <button onclick="showProof(${block.chainIndex})">View Proof</button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+</script>
+<!-- Proof Modal -->
+<div id="proofModal" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  align-items:center;
+  justify-content:center;
+">
+
+  <div style="
+    background:white;
+    padding:20px;
+    width:400px;
+    border-radius:8px;
+  ">
+    <h3>📄 Blockchain Proof Report</h3>
+    <div id="proofContent"></div>
+    <br>
+    <button onclick="closeProof()">Close</button>
+  </div>
+</div>
+</body>
+</html>

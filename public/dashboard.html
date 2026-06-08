@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockchain Dashboard</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f2027;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      flex: 1;
+      background: #1c313a;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    canvas {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>📊 Blockchain Dashboard</h1>
+
+<div class="cards">
+  <div class="card">
+    <h3>Total Files</h3>
+    <h2 id="totalFiles">0</h2>
+  </div>
+
+  <div class="card">
+    <h3>Total Blocks</h3>
+    <h2 id="totalBlocks">0</h2>
+  </div>
+
+  <div class="card">
+    <h3>Latest Upload</h3>
+    <h4 id="latestUpload">-</h4>
+  </div>
+</div>
+
+<h3> Files by Region</h3>
+<canvas id="regionChart"></canvas>
+
+<h3> Upload Trend</h3>
+<canvas id="trendChart"></canvas>
+
+<script>
+async function loadDashboard() {
+  const res = await fetch("/api/blocks");
+  const blocks = await res.json();
+
+  const dataBlocks = blocks.slice(1); // remove genesis
+
+  document.getElementById("totalFiles").innerText = dataBlocks.length;
+  document.getElementById("totalBlocks").innerText = blocks.length;
+
+  if (dataBlocks.length > 0) {
+    document.getElementById("latestUpload").innerText =
+      dataBlocks[dataBlocks.length - 1].data.originalName;
+  }
+
+  // Region count
+  const regionCount = {};
+
+  dataBlocks.forEach(b => {
+    const r = b.data.region || "Unknown";
+    regionCount[r] = (regionCount[r] || 0) + 1;
+  });
+
+  new Chart(document.getElementById("regionChart"), {
+    type: "bar",
+    data: {
+      labels: Object.keys(regionCount),
+      datasets: [{
+        label: "Files",
+        data: Object.values(regionCount)
+      }]
+    }
+  });
+
+  // Trend (uploads over time)
+  const dates = {};
+  dataBlocks.forEach(b => {
+    const date = new Date(b.data.uploadedAt).toLocaleDateString();
+    dates[date] = (dates[date] || 0) + 1;
+  });
+
+  new Chart(document.getElementById("trendChart"), {
+    type: "line",
+    data: {
+      labels: Object.keys(dates),
+      datasets: [{
+        label: "Uploads",
+        data: Object.values(dates)
+      }]
+    }
+  });
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>

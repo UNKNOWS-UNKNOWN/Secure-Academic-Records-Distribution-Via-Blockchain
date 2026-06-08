@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blockchain Explorer</title>
+
+  <style>
+    /* 🌐 Global */
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #eaeaea;
+  padding: 20px;
+}
+
+/* 🧱 Title */
+h1 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+}
+
+/* 📦 Table Container */
+.table-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+/* 📊 Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+/* 🔠 Header */
+th {
+  background: rgba(0, 0, 0, 0.6);
+  color: #00e5ff;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 10px;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 📄 Cells */
+td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 🧬 Hash Styling */
+.hash {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #b3e5fc;
+  word-break: break-all;
+}
+
+/* 🟢 Hover */
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease-in-out;
+}
+
+/* 🌍 Region Colors */
+.central {
+  border-left: 4px solid #2196f3;
+}
+.south {
+  border-left: 4px solid #4caf50;
+}
+.north {
+  border-left: 4px solid #ff9800;
+}
+
+/* 🔘 Buttons */
+button {
+  background: linear-gradient(135deg, #00e5ff, #2979ff);
+  border: none;
+  color: #000;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 229, 255, 0.4);
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
+  table {
+    font-size: 11px;
+  }
+}
+/* 🔗 Chain Column */
+.chain-cell {
+  position: relative;
+  width: 36px;
+  text-align: center;
+}
+
+/* 🟢 Block Node */
+.chain-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #00e5ff, #0288d1);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.9);
+  z-index: 2;
+}
+
+/* 🧬 Vertical Link */
+.chain-line {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: calc(100% + 14px);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 229, 255, 0.1),
+    rgba(0, 229, 255, 0.9),
+    rgba(0, 229, 255, 0.1)
+  );
+  animation: chainPulse 1.8s infinite;
+}
+
+/* ✨ Pulse Animation */
+@keyframes chainPulse {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<h1>📦 Blockchain Explorer</h1>
+
+<div class="table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Chain</th>
+      <th>Block Hash</th>
+      <th>Previous Hash</th>
+      <th>File Name</th>
+      <th>File Hash</th>
+      <th>Region</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+
+  <tbody id="blocks"></tbody>
+</table>
+</div>
+
+<script>
+async function loadBlocks() {
+  const res = await fetch("/api/blocks");
+  const blocks = await res.json();
+
+  const tbody = document.getElementById("blocks");
+  tbody.innerHTML = "";
+
+  blocks.forEach((block, index) => {
+    const d = block.data || {};
+
+    const row = document.createElement("tr");
+    row.className = (d.region || "").toLowerCase();
+
+    row.innerHTML = `
+    
+  <td>${index}</td>
+
+  <td class="chain-cell">
+    <span class="chain-dot"></span>
+    ${index !== blocks.length - 1 ? '<span class="chain-line"></span>' : ''}
+  </td>
+
+  <td class="hash">${block.hash}</td>
+  <td class="hash">${block.prevHash}</td>
+  <td>${d.originalName || "-"}</td>
+  <td class="hash">${d.hash || "-"}</td>
+  <td>${d.region || "-"}</td>
+  <td>${block.timestamp ? new Date(block.timestamp).toLocaleString() : "-"}</td>
+`;
+
+    if (block.prevHash === "0x000") {
+        row.style.boxShadow = "inset 0 0 0 2px #ff9800";
+    }
+    tbody.appendChild(row);
+  });
+}
+
+loadBlocks();
+</script>
+
+</body>
+</html>
