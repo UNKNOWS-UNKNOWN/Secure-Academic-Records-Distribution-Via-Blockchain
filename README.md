@@ -144,12 +144,24 @@ Once all nodes are active, transactions and blockchain updates are synchronized 
 
 ## Screenshots
 
-Add screenshots of:
+## Screenshots
 
-* Blockchain node interface
-* Transaction creation
-* Record verification process
-* Network synchronization
+### Blockchain Ledger
+
+![Ledger](Screenshots/Explorer.png)
+
+### Block Proof
+
+![Network](Screenshots/Blocks_proof.png)
+
+### Transaction Creation
+
+![Transaction](Screenshots/South_node.png)
+
+### Dashboard
+
+![Dashboard](Screenshots/Dashboard.png)
+
 
 ## Author
 
