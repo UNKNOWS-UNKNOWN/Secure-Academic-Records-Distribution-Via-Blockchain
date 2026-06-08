@@ -1,0 +1,30 @@
+{
+  "name": "blockchain_academy_records",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:south": "cross-env REGION=South node index.js",
+    "start:east": "cross-env REGION=East GENERATE_PEER_PORT=true node index.js",
+    "start:north": "cross-env REGION=North GENERATE_PEER_PORT=true node index.js",
+    "dev": "nodemon index.js",
+    "dev-peer": "cross-env GENERATE_PEER_PORT='true' nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "express": "^5.2.1",
+    "hex-to-binary": "^1.0.1",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.17.2",
+    "redis": "^5.11.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
